@@ -5,7 +5,7 @@ class Footer extends React.Component {
 		return (
 			<nav className="navbar navbar-default navbar-fixed-bottom footer">
 				<div className="container-fluid text-center footer-text">
-					<a href="https://github.com/weihanchen/user-authentication-nodejs" target="_blank">User-authentication-nodejs</a>  is maintained by  <a href="https://github.com/weihanchen"  target="_blank">weihanchen</a>
+					<a href="https://whiteklay.com" target="_blank">User-authentication-nodejs</a>  is maintained by  <a href="https://whiteklay.com"  target="_blank">Whiteklay Technologies Pvt Ltd</a>
 				</div>
 			</nav>
 		)

@@ -9,7 +9,7 @@ class Header extends React.Component {
 	render() {
 		return (
 			<div>
-				<AppBar title="Simple demo of user authentication"  showMenuIconButton={false} className="text-center"></AppBar>
+				<AppBar title="user authentication"  showMenuIconButton={false} className="text-center"></AppBar>
 			</div>
 		)
 	}

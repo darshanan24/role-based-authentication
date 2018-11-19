@@ -26,13 +26,15 @@ class Profile extends Component {
 			displayName,
 			role,
 			uid,
-			username
+			username,
+			password //edited
 		} = this.props
 		this.state = {
 			displayName: displayName,
 			role: role,
 			uid: uid,
-			username: username
+			username: username,
+			password:password // edited
 		}
 	}
 
@@ -65,7 +67,7 @@ class Profile extends Component {
 		const {
 			handleUpdateUser
 		} = this.props
-		handleUpdateUser(this.state.displayName, this.state.uid, this.state.username)
+		handleUpdateUser(this.state.displayName, this.state.uid, this.state.username,this.state.password)//edited
 	}
 
 	render() {
@@ -78,6 +80,7 @@ class Profile extends Component {
 					<CardText>
 						<FormsyText name="displayName" floatingLabelText="DisplayName" fullWidth={true} value={this.state.displayName} onChange={this.onFieldChanged.bind(this,'displayName')} required />
 						<FormsyText name="username" floatingLabelText="Username" fullWidth={true} value={this.state.username} onChange={this.onFieldChanged.bind(this,'username')} required />
+						<FormsyText name="password" type="password" floatingLabelText="Password" fullWidth={true} value={this.state.password} onChange={this.onFieldChanged.bind(this,'password')} required />
 						<TextField name="role" floatingLabelText="Role" fullWidth={true} value={this.state.role} disabled={true} />
 						<p></p>
 						<TextField name="uid" floatingLabelText="UID" fullWidth={true} disabled={true} value={this.state.uid} ></TextField>
@@ -102,5 +105,6 @@ Profile.propTypes = {
 	role: PropTypes.string,
 	status: PropTypes.string,
 	uid: PropTypes.string,
-	username: PropTypes.string
+	username: PropTypes.string,
+	password:PropTypes.string
 }

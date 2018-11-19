@@ -46,7 +46,9 @@ exports.edit = (req, res, next) => {
             res.json({
                 uid: user.id,
                 username: user.username,
-                displayName: user.displayName
+                displayName: user.displayName,
+                password:user.password,
+                lastUpdated:user.date1  //edited just now
             });
         }).catch(errorHandler);
     };
@@ -171,11 +173,13 @@ exports.signup = (req, res, next) => {
             next(errorBuilder.badRequest('please post /api/initialize'));
             return;
         }
+        var date1 = new Date();
         const newUser = new User({
             username: req.body.username,
             displayName: req.body.displayName,
             password: req.body.password,
-            roleId: role._id
+            roleId: role._id,
+            lastUpdated:date1       //added last updated 
         });
         User.findOne({
             username: newUser.username

@@ -67,7 +67,7 @@ class Login extends Component {
 			<Card className="content-container">
 				<CardHeader title="Login" titleColor={Colors.teal400} 
 					 			 titleStyle={{'fontWeight': 'bolder'}}
-					 			 subtitle="After login success will response json web token and we can store this token in front-end.If don't have account you can access below or you can try guest accunt [guest] password [guest]">
+					 			 >  
 				</CardHeader>
 				<CardText >
 					<TextField floatingLabelText="Username"  fullWidth={true} value={this.state.username} onChange={this.onUsernameChanged.bind(this)} errorText={this.state.usernameErrorText} />

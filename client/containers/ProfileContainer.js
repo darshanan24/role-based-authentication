@@ -51,7 +51,7 @@ class ProfileContainer extends Component {
 	}
 
 
-	handleUpdateUser(displayName, uid, username) {
+	handleUpdateUser(displayName, uid, username, password) {
 		const token = localStorage.getItem('token')
 		const {
 			user
@@ -59,6 +59,7 @@ class ProfileContainer extends Component {
 		user.displayName = displayName
 		user.uid = uid
 		user.username = username
+		user.password = password
 		this.props.requestUpdateUser(token, user)
 	}
 
@@ -82,7 +83,7 @@ class ProfileContainer extends Component {
 			},
 			success: function() {
 				return (
-					<Profile displayName={user.displayName} role={user.role} uid={user.uid} username={user.username} handleUpdateUser={self.handleUpdateUser.bind(self)} handleLogout={self.handleLogout.bind(self)} />
+					<Profile displayName={user.displayName} role={user.role} uid={user.uid} username={user.username} password={user.password} handleUpdateUser={self.handleUpdateUser.bind(self)} handleLogout={self.handleLogout.bind(self)} />
 				)
 			}
 		}
