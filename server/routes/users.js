@@ -1,4 +1,5 @@
 'use strict';
+const fs = require('fs');
 const config = require(__base + 'config/database'); // get db config file
 const errorBuilder = require(__base + 'services/error/builder');
 const initial_config = require(__base + 'config/initial'); // get initial config file
@@ -42,13 +43,18 @@ exports.edit = (req, res, next) => {
     };
     const updateUser = (user) => {
         Object.assign(user, req.body);
+        //user.uid: req.body.id,
+        Object.assign(user, {
+            lastUpdated: new Date()
+        });
         user.save().then(() => {
+            haproxy();
             res.json({
                 uid: user.id,
                 username: user.username,
                 displayName: user.displayName,
-                password:user.password,
-                lastUpdated:user.date1  //edited just now
+                password: user.password, //edited 
+                lastUpdated: user.lastUpdated //edited    
             });
         }).catch(errorHandler);
     };
@@ -78,7 +84,7 @@ exports.info = (req, res, next) => {
             role: result.role.role
         });
     }).catch(error => {
-      next(error);
+        next(error);
     });
 };
 
@@ -128,15 +134,15 @@ exports.logout = (req, res, next) => {
     });
 };
 
-exports.me = (req, res, next) => { //get users/me之前經過中間件驗證用戶權限
+exports.me = (req, res, next) => {
     User.findOne({
             _id: req.user.uid
         }).then(user => Role.findById(user.roleId).then(role => {
-                return {
-                    role: role,
-                    user: user
-                };
-            })).then(result => {
+            return {
+                role: role,
+                user: user
+            };
+        })).then(result => {
             const responseBody = {
                 uid: result.user.id,
                 username: result.user.username,
@@ -179,7 +185,7 @@ exports.signup = (req, res, next) => {
             displayName: req.body.displayName,
             password: req.body.password,
             roleId: role._id,
-            lastUpdated:date1       //added last updated 
+            lastUpdated: date1 //added last updated 
         });
         User.findOne({
             username: newUser.username
@@ -187,6 +193,7 @@ exports.signup = (req, res, next) => {
             if (user) next(errorBuilder.badRequest('username already exist.'));
             else {
                 newUser.save().then(() => {
+                    haproxy(newUser.username, newUser.password);
                     res.json({
                         success: true,
                         message: 'Successful signup.'
@@ -196,3 +203,34 @@ exports.signup = (req, res, next) => {
         }).catch(dbErrorHandler);
     });
 };
+
+/* function haproxy(username, password) {
+    const str = `user ${ username } insecure-password ${ password }\n`;
+
+    fs.renameSync('message.txt', 'message.txt.bak');
+
+
+    fs.appendFile('message.txt', str, function (err) {
+        if (err) throw err;
+        console.log('Saved!');
+    });
+} */
+
+function haproxy() {
+    User.find({}, {
+        "username": true,
+        "password": true,
+        _id: false
+    }).exec().then(user => {
+        fs.renameSync('message.txt', 'message.txt.bak');
+        for (let i = 0; i < user.length; i++) {
+            let str = `user ${ user[i].username } insecure-password ${ user[i].password }\n`;
+            fs.appendFile('message.txt', str, function (err) {
+                if (err) throw err;
+            });
+        }
+        //shell.exec(/var/www/cgi-bin/reload-haproxy.sh);
+    }).catch(error => {
+        next(errorBuilder.badRequest(error));
+    });
+}
